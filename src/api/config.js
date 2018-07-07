@@ -3,11 +3,11 @@ export const commonParams = {
   inCharset: 'utf-8',
   outCharset: 'utf-8',
   notice: 0,
-  format: 'jsonp'
+  format: 'json'
 }
 
 export const options = {
-  param: 'jsonpCallback'
+  param: 'jsonpCallback' // 这里不能是params
 }
 
 export const ERR_OK = 0

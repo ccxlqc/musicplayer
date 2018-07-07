@@ -15,18 +15,21 @@ export function getRecommend() {
 }
 
 export function getDiscList() {
-  const url = '/api/getDiscList'
+  const url = '/api'
 
   const data = Object.assign({}, commonParams, {
-    platform: 'yqq',
+    picmid: 1,
+    rnd: 0.8462331582126674,
+    g_tk: 5381,
+    jsonpCallback: 'getPlaylist',
+    loginUin: 1337994319,
     hostUin: 0,
-    sin: 0,
-    ein: 29,
-    sortId: 5,
+    platform: 'yqq',
     needNewCode: 0,
     categoryId: 10000000,
-    rnd: Math.random(),
-    format: 'json'
+    sortId: 5,
+    sin: 0,
+    ein: 29
   })
 
   return axios.get(url, {
