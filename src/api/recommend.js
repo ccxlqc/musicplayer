@@ -15,7 +15,7 @@ export function getRecommend() {
 }
 
 export function getDiscList() {
-  const url = '/api'
+  const url = '/api/getDiscList'
 
   const data = Object.assign({}, commonParams, {
     picmid: 1,
@@ -29,7 +29,8 @@ export function getDiscList() {
     categoryId: 10000000,
     sortId: 5,
     sin: 0,
-    ein: 29
+    ein: 29,
+    format: 'json'
   })
 
   return axios.get(url, {
@@ -41,16 +42,22 @@ export function getDiscList() {
 
 export function getSongList(disstid) {
   const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
-
   const data = Object.assign({}, commonParams, {
+    g_tk: 5381,
+    format: 'json',
+    platform: 'h5',
+    needNewCode: 1,
+    new_format: 1,
+    pic: 500,
+    disstid,
     type: 1,
-    json: 1,
     utf8: 1,
     onlysong: 0,
-    platform: 'yqq',
-    hostUin: 0,
-    needNewCode: 0
+    picmid: 1,
+    nosign: 1,
+    song_begin: 0,
+    song_num: 15,
+    _: 1531812445386
   })
-
   return jsonp(url, data, options)
 }

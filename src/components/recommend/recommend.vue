@@ -41,6 +41,8 @@ import Loading from 'base/loading/loading'
 import Scroll from 'base/scroll/scroll'
 import {getRecommend, getDiscList} from 'api/recommend'
 import {ERR_OK} from 'api/config'
+import {playlistMixin} from 'common/js/mixin'
+import {mapMutations} from 'vuex'
 
 export default {
   data() {
@@ -54,7 +56,16 @@ export default {
 
     this._getDiscList()
   },
+  mixins: [playlistMixin],
   methods: {
+    ...mapMutations({
+      setDisc: 'SET_DISC'
+    }),
+    handlePlaylist(playList) {
+      const bottom = playList.length > 0 ? '60px' : ''
+      this.$refs.recommend.style.bottom = bottom
+      this.$refs.scroll.refresh()
+    },
     loadImage() {
       if (!this.checkloaded) {
         this.checkloaded = true

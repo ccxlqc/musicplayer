@@ -14,7 +14,6 @@ const express = require('express')
 const axios = require('axios')
 const app = express()
 var apiRoutes = express.Router()
-app.use('/api', apiRoutes)
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -28,8 +27,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
   // these devServer options should be customized in /config/index.js
   devServer: {
-    before(app) {
-      app.get('/api', function(req, res) {
+    before(apiRoutes) {
+      apiRoutes.get('/api/getDiscList', function(req, res) {
         const url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
         axios.get(url, {
           headers: {
@@ -42,6 +41,72 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         }).catch((e) => {
           console.log(e)
         })
+      })
+      apiRoutes.get('/api/lyric', function (req, res) {
+        var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          var ret = response.data
+          if (typeof ret === 'string') {
+          var reg = /^\w+\(({[^()]+})\)$/
+          var matches = ret.match(reg)
+          if (matches) {
+            ret = JSON.parse(matches[1])
+          }
+        }
+        res.json(ret)
+      }).catch((e) => {
+          console.log(e)
+      })
+      })
+      apiRoutes.get('/api/topList', function (req, res) {
+        var url = 'https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          var ret = response.data
+          if (typeof ret === 'string') {
+          var reg = /^\w+\(({[^()]+})\)$/
+          var matches = ret.match(reg)
+          if (matches) {
+            ret = JSON.parse(matches[1])
+          }
+        }
+        res.json(ret)
+      }).catch((e) => {
+          console.log(e)
+      })
+      })
+      apiRoutes.get('/api/search', function (req, res) {
+        var url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          var ret = response.data
+          if (typeof ret === 'string') {
+          var reg = /^\w+\(({[^()]+})\)$/
+          var matches = ret.match(reg)
+          if (matches) {
+            ret = JSON.parse(matches[1])
+          }
+        }
+        res.json(ret)
+      }).catch((e) => {
+          console.log(e)
+      })
       })
     },
     clientLogLevel: 'warning',

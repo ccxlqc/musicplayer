@@ -5,6 +5,7 @@ import router from './router'
 import 'common/stylus/index.styl'
 import VueLazyload from 'vue-lazyload'
 import 'babel-polyfill'
+import store from './store'
 
 fastclick.attach(document.body)
 
@@ -15,5 +16,6 @@ Vue.use(VueLazyload, {
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })

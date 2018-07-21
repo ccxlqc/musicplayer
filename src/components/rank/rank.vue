@@ -1,11 +1,72 @@
 <template>
-  <div>
-    排行
+  <div class="rank" ref="rank">
+    <scroll class="toplist" ref="toplist">
+      <ul>
+        <li class="item" v-for="item in topList" @click="selectItem(item)">
+          <div class="icon">
+            <img src="" width="100px" height="100px" v-lazy="item.picUrl">
+          </div>
+          <ul class="songlist">
+            <li class="song" v-for="(song, index) in item.songList">
+              <span>{{index + 1}}</span>
+              <span>{{song.songname}}--{{song.singername}}</span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <div class="loading-container" v-show="!topList.length>0">
+        <loading></loading>
+      </div>
+    </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-
+import {getTopList} from 'api/rank'
+import {ERR_OK} from 'api/config'
+import Scroll from 'base/scroll/scroll'
+import Loading from 'base/loading/loading'
+import {playlistMixin} from 'common/js/mixin'
+import {mapMutations} from 'vuex'
+export default {
+  data() {
+    return {
+      topList: []
+    }
+  },
+  mixins: [playlistMixin],
+  created() {
+    this._getTopList()
+  },
+  methods: {
+    ...mapMutations({
+      setTopList: 'SET_TOP_LIST'
+    }),
+    handlePlaylist(playList) {
+      const bottom = playList.length > 0 ? '60px' : 0
+      this.$refs.rank.style.bottom = bottom
+      this.$refs.toplist.refresh()
+    },
+    selectItem(item) {
+      this.$router.push({
+        path: `/rank/${item.id}`
+      })
+     this.setTopList(item)
+    },
+    _getTopList() {
+      getTopList().then((res) => {
+        if (res.code === ERR_OK) {
+          this.topList = res.data.topList
+        }
+      })
+    }
+  },
+  components: {
+    Scroll,
+    Loading
+  }
+}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

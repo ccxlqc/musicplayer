@@ -36,7 +36,8 @@ export default {
   data() {
     return {
       dots: [],
-      currentPageIndex: 0
+      currentPageIndex: 0,
+      children: null
     }
   },
   mounted() {
